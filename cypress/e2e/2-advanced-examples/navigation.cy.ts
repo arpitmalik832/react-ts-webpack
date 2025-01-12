@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /// <reference types="cypress" />
 
 context('Navigation', () => {
@@ -46,11 +45,11 @@ context('Navigation', () => {
       timeout: 50000, // increase total time for the visit to resolve
       onBeforeLoad(contentWindow) {
         // contentWindow is the remote page's window object
-        expect(typeof contentWindow === 'object').to.be.true;
+        assert.equal(typeof contentWindow, 'object');
       },
       onLoad(contentWindow) {
         // contentWindow is the remote page's window object
-        expect(typeof contentWindow === 'object').to.be.true;
+        assert.equal(typeof contentWindow, 'object');
       },
     });
   });

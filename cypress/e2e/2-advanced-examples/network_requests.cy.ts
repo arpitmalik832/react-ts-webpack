@@ -6,32 +6,33 @@ context('Network Requests', () => {
   });
 
   // Manage HTTP requests in your app
+  interface TestContext {
+    user: { id: number };
+    post: unknown;
+  }
 
   it('cy.request() - make an XHR request', () => {
     // https://on.cypress.io/request
-    cy.request('https://jsonplaceholder.cypress.io/comments').should(
-      response => {
-        expect(response.status).to.eq(200);
-        // the server sometimes gets an extra comment posted from another machine
-        // which gets returned as 1 extra object
-        expect(response.body)
-          .to.have.property('length')
-          .and.be.oneOf([500, 501]);
-        expect(response).to.have.property('headers');
-        expect(response).to.have.property('duration');
-      },
-    );
+    cy.request('https://jsonplaceholder.cypress.io/comments').then(response => {
+      cy.wrap(response.status).should('eq', 200);
+      // the server sometimes gets an extra comment posted from another machine
+      // which gets returned as 1 extra object
+      cy.wrap(response.body)
+        .should('have.property', 'length')
+        .and('be.oneOf', [500, 501]);
+      cy.wrap(response).should('have.property', 'headers');
+      cy.wrap(response).should('have.property', 'duration');
+    });
   });
 
   it('cy.request() - verify response using BDD syntax', () => {
     cy.request('https://jsonplaceholder.cypress.io/comments').then(response => {
       // https://on.cypress.io/assertions
-      expect(response).property('status').to.equal(200);
-      expect(response)
-        .property('body')
-        .to.have.property('length')
-        .and.be.oneOf([500, 501]);
-      expect(response).to.include.keys('headers', 'duration');
+      cy.wrap(response.status).should('eq', 200);
+      cy.wrap(response.body)
+        .should('have.property', 'length')
+        .and('be.oneOf', [500, 501]);
+      cy.wrap(response).should('include.keys', 'headers', 'duration');
     });
   });
 
@@ -63,8 +64,8 @@ context('Network Requests', () => {
       // the above two commands its('body').its('0')
       // can be written as its('body.0')
       // if you do not care about TypeScript checks
-      .then(user => {
-        expect(user).property('id').to.be.a('number');
+      .then((user: { id: number }) => {
+        cy.wrap(user).should('have.property', 'id').should('be.a', 'number');
         // make a new post on behalf of the user
         cy.request('POST', 'https://jsonplaceholder.cypress.io/posts', {
           userId: user.id,
@@ -74,26 +75,28 @@ context('Network Requests', () => {
       })
       // note that the value here is the returned value of the 2nd request
       // which is the new post object
-      .then(response => {
-        expect(response).property('status').to.equal(201); // new entity created
-        expect(response).property('body').to.contain({
-          title: 'Cypress Test Runner',
-        });
+      .then((response: { body: object }) => {
+        cy.wrap(response).should('have.property', 'status', 201); // new entity created
+        cy.wrap(response)
+          .should('have.property', 'body')
+          .and('have.property', 'title', 'Cypress Test Runner');
 
         // we don't know the exact post id - only that it will be > 100
         // since JSONPlaceholder has built-in 100 posts
-        expect(response.body)
-          .property('id')
-          .to.be.a('number')
-          .and.to.be.gt(100);
+        cy.wrap(response.body)
+          .should('have.property', 'id')
+          .and('be.a', 'number')
+          .and('be.gt', 100);
 
         // we don't know the user id here - since it was in above closure
         // so in this test just confirm that the property is there
-        expect(response.body).property('userId').to.be.a('number');
+        cy.wrap(response.body)
+          .should('have.property', 'userId')
+          .and('be.a', 'number');
       });
   });
 
-  it('cy.request() - save response in the shared test context', () => {
+  it('cy.request() - save response in the shared test context', function testContext(this: TestContext) {
     // https://on.cypress.io/variables-and-aliases
     cy.request('https://jsonplaceholder.cypress.io/users?_limit=1')
       .its('body')
@@ -118,9 +121,9 @@ context('Network Requests', () => {
         // When this callback runs, both "cy.request" API commands have finished
         // and the test context has "user" and "post" objects set.
         // Let's verify them.
-        expect(this.post, 'post has the right user id')
-          .property('userId')
-          .to.equal(this.user.id);
+        cy.wrap(this.post)
+          .should('have.property', 'userId')
+          .and('equal', this.user.id);
       });
   });
 
@@ -147,10 +150,11 @@ context('Network Requests', () => {
     // we have code that posts a comment when
     // the button is clicked in scripts.js
     cy.get('.network-post').click();
-    cy.wait('@postComment').should(({ request, response }) => {
-      expect(request.body).to.include('email');
-      expect(request.headers).to.have.property('content-type');
-      expect(response && response.body).to.have.property(
+    cy.wait('@postComment').then(({ request, response }) => {
+      cy.wrap(request.body).should('include', 'email');
+      cy.wrap(request.headers).should('have.property', 'content-type');
+      cy.wrap(response && response.body).should(
+        'have.property',
         'name',
         'Using POST in cy.intercept()',
       );

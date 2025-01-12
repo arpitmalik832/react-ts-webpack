@@ -1,4 +1,4 @@
-import { slices } from '@arpitmalik832/react-js-rollup-monorepo-library';
+import { slices } from '@arpitmalik832/react-ts-rollup-library';
 import { useDispatch } from 'react-redux';
 
 import s from './index.module.scss';
