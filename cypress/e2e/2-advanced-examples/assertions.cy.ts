@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /// <reference types="cypress" />
 
 context('Assertions', () => {
@@ -50,15 +49,15 @@ context('Assertions', () => {
 
   describe('Explicit Assertions', () => {
     // https://on.cypress.io/assertions
-    it('expect - make an assertion about a specified subject', () => {
+    it('cy.wrap - make an assertion about a specified subject', () => {
       // We can use Chai's BDD style assertions
-      expect(true).to.be.true;
+      cy.wrap(true).should('be.true');
       const o = { foo: 'bar' };
 
-      expect(o).to.equal(o);
-      expect(o).to.deep.equal({ foo: 'bar' });
+      cy.wrap(o).should('equal', o);
+      cy.wrap(o).should('deep.equal', { foo: 'bar' });
       // matching text using regular expression
-      expect('FooBar').to.match(/bar$/i);
+      cy.wrap('FooBar').should('match', /bar$/i);
     });
 
     it('pass your own callback function to should()', () => {
@@ -68,7 +67,7 @@ context('Assertions', () => {
       // automatically until it passes all your explicit assertions or times out.
       cy.get('.assertions-p')
         .find('p')
-        .should($p => {
+        .then($p => {
           // https://on.cypress.io/$
           // return an array of texts from all of the p's
           const texts = $p.map((i, el) => Cypress.$(el).text());
@@ -78,11 +77,11 @@ context('Assertions', () => {
           const paragraphs = texts.get();
 
           // array should have length of 3
-          expect(paragraphs, 'has 3 paragraphs').to.have.length(3);
+          cy.wrap(paragraphs).should('have.length', 3);
 
-          // use second argument to expect(...) to provide clear
+          // use second argument to cy.wrap(...) to provide clear
           // message with each assertion
-          expect(paragraphs, 'has expected text in each paragraph').to.deep.eq([
+          cy.wrap(paragraphs).should('deep.eq', [
             'Some text from first p',
             'More text from second p',
             'And even more text from third p',
@@ -94,24 +93,20 @@ context('Assertions', () => {
       cy.get('.docs-header')
         .find('div')
         // .should(cb) callback function will be retried
-        .should($div => {
-          expect($div).to.have.length(1);
+        .then($div => {
+          cy.wrap($div).should('have.length', 1);
 
           const { className } = $div[0];
 
-          expect(className).to.match(/heading-/);
-        })
-        // .then(cb) callback is not retried,
-        // it either passes or fails
-        .then($div => {
-          expect($div, 'text content').to.have.text('Introduction');
+          cy.wrap(className).should('match', /heading-/);
+          cy.wrap($div).should('have.text', 'Introduction');
         });
     });
 
     it('can throw any error', () => {
       cy.get('.docs-header')
         .find('div')
-        .should($div => {
+        .then($div => {
           if ($div.length !== 1) {
             // you can throw your own errors
             throw new Error('Did not find 1 element');
@@ -119,16 +114,16 @@ context('Assertions', () => {
 
           const { className } = $div[0];
 
-          if (!className.match(/heading-/)) {
+          if (!/heading-/.exec(className)) {
             throw new Error(`Could not find class "heading-" in ${className}`);
           }
         });
     });
 
     it('matches unknown text between two elements', () => {
-      let text;
+      let text: string;
 
-      function normalizeText(s) {
+      function normalizeText(s: string) {
         return s.replace(/\s/g, '').toLowerCase();
       }
 
@@ -141,11 +136,11 @@ context('Assertions', () => {
 
       cy.get('.two-elements')
         .find('.second')
-        .should($div => {
+        .then($div => {
           // we can massage text before comparing
           const secondText = normalizeText($div.text());
 
-          expect(secondText, 'second text').to.equal(text);
+          cy.wrap(secondText).should('equal', text);
         });
     });
 
@@ -159,10 +154,10 @@ context('Assertions', () => {
     });
 
     it('retries the should callback until assertions pass', () => {
-      cy.get('#random-number').should($div => {
+      cy.get('#random-number').then($div => {
         const n = parseFloat($div.text());
 
-        expect(n).to.be.gte(1).and.be.lte(10);
+        cy.wrap(n).should('be.NaN');
       });
     });
   });

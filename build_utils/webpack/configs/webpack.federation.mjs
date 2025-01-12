@@ -42,9 +42,9 @@ const config = {
           //   requiredVersion: deps['lottie-react'],
           //   eager: true,
           // },
-          // 'react-router-dom': {
+          // 'react-router': {
           //   singleton: true,
-          //   requiredVersion: deps['react-router-dom'],
+          //   requiredVersion: deps['react-router'],
           //   eager: true,
           // },
           // moment: {
