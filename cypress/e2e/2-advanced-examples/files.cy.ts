@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /// <reference types="cypress" />
 
 /// JSON fixture file can be loaded directly using
@@ -36,13 +35,13 @@ context('Files', () => {
       .and('include', 'Using fixtures to represent data');
   });
 
-  it('cy.fixture() or require - load a fixture', () => {
+  it('cy.fixture() or require - load a fixture', function testFunc(this: {
+    example: unknown;
+  }) {
     // we are inside the "function () { ... }"
     // callback and can use test context object "this"
     // "this.example" was loaded in "beforeEach" function callback
-    expect(this.example, 'fixture in the test context').to.deep.equal(
-      requiredExample,
-    );
+    cy.wrap(this.example).should('deep.equal', requiredExample);
 
     // or use "cy.wrap" and "should('deep.equal', ...)" assertion
     cy.wrap(this.example).should('deep.equal', requiredExample);
@@ -54,7 +53,7 @@ context('Files', () => {
     // You can read a file and yield its contents
     // The filePath is relative to your project's root.
     cy.readFile(Cypress.config('configFile')).then(config => {
-      expect(config).to.be.an('string');
+      cy.wrap(config).should('be.an', 'string');
     });
   });
 
@@ -65,14 +64,65 @@ context('Files', () => {
 
     // Use a response from a request to automatically
     // generate a fixture file for use later
-    cy.request('https://jsonplaceholder.cypress.io/users').then(response => {
-      cy.writeFile('cypress/fixtures/users.json', response.body);
-    });
+    cy.request('https://jsonplaceholder.cypress.io/users').then(
+      (response: {
+        body: {
+          id: number;
+          name: string;
+          username: string;
+          email: string;
+          address: {
+            street: string;
+            suite: string;
+            city: string;
+            zipcode: string;
+            geo: {
+              lat: string;
+              lng: string;
+            };
+          };
+          phone: string;
+          website: string;
+          company: {
+            name: string;
+            catchPhrase: string;
+            bs: string;
+          };
+        }[];
+      }) => {
+        cy.writeFile('cypress/fixtures/users.json', response.body);
+      },
+    );
 
-    cy.fixture('users').should(users => {
-      // eslint-disable-next-line no-unused-expressions
-      expect(users[0].name).to.exist;
-    });
+    cy.fixture('users').then(
+      (
+        users: {
+          id: number;
+          name: string;
+          username: string;
+          email: string;
+          address: {
+            street: string;
+            suite: string;
+            city: string;
+            zipcode: string;
+            geo: {
+              lat: string;
+              lng: string;
+            };
+          };
+          phone: string;
+          website: string;
+          company: {
+            name: string;
+            catchPhrase: string;
+            bs: string;
+          };
+        }[],
+      ) => {
+        cy.wrap(users[0].name).should('exist');
+      },
+    );
 
     // JavaScript arrays and objects are stringified
     // and formatted into text.
@@ -82,8 +132,10 @@ context('Files', () => {
       email: 'jane@example.com',
     });
 
-    cy.fixture('profile').should(profile => {
-      expect(profile.name).to.eq('Jane');
-    });
+    cy.fixture('profile').then(
+      (profile: { id: number; name: string; email: string }) => {
+        cy.wrap(profile.name).should('eq', 'Jane');
+      },
+    );
   });
 });

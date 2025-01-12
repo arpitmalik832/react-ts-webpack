@@ -4,6 +4,7 @@
  */
 import express from 'express';
 import expressStaticGzip from 'express-static-gzip';
+import chalk from 'chalk';
 
 import { outputPath } from '../build_utils/config/commonPaths.mjs';
 import { SERVER_STARTED_SUCCESSFULLY } from '../build_utils/config/logs.mjs';
@@ -44,5 +45,5 @@ app.get('/*', (req, res) => {
 
 app.listen(port, '0.0.0.0', () => {
   // eslint-disable-next-line no-console
-  console.log(SERVER_STARTED_SUCCESSFULLY(port));
+  console.log(chalk.green(SERVER_STARTED_SUCCESSFULLY(port)));
 });

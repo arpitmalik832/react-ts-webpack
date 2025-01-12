@@ -1,3 +1,7 @@
+/**
+ * SVGR configuration file.
+ * @file The file is saved as `svgr.config.mjs`.
+ */
 const config = {
   prettier: true,
   svgo: true,

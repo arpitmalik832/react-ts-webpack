@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
-import { log } from '@arpitmalik832/react-js-rollup-monorepo-library';
+import { Outlet, useLocation } from 'react-router';
+import { log } from '@arpitmalik832/react-ts-rollup-library';
 
 function PageWrapper() {
   const location = useLocation();
