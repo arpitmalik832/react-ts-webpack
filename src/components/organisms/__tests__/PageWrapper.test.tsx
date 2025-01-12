@@ -3,9 +3,9 @@ import '@testing-library/jest-dom';
 
 import PageWrapper from '../PageWrapper';
 
-jest.mock('react-router-dom', () => ({
+jest.mock('react-router', () => ({
   __esModule: true,
-  ...jest.requireActual('react-router-dom'),
+  ...jest.requireActual<object>('react-router'),
   useLocation: () => ({
     pathname: '/test',
   }),

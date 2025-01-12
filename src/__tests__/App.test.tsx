@@ -3,7 +3,7 @@ import '@testing-library/jest-dom';
 
 import Component from '../App';
 
-jest.mock('react-router-dom', () => ({
+jest.mock('react-router', () => ({
   __esModule: true,
   RouterProvider: jest.fn(() => <div data-testid="mock-router-provider" />),
 }));
