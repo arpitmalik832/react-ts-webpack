@@ -1,5 +1,6 @@
-import React from 'react';
-import { StoryFn } from '@storybook/react';
+import { Args, StoryContext, StoryFn } from '@storybook/react';
+
+import '@arpitmalik832/react-ts-rollup-library/styles/postcss-processed/index.css';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -12,9 +13,7 @@ export const parameters = {
 };
 
 export const decorators = [
-  (Story: StoryFn) => (
-    <div style={{ margin: '3em' }}>
-      <Story />
-    </div>
+  (Story: StoryFn, context: StoryContext<Args>) => (
+    <div style={{ margin: '3em' }}>{Story(context.args, context)}</div>
   ),
 ];

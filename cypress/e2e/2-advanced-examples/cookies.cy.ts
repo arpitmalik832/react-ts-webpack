@@ -28,14 +28,14 @@ context('Cookies', () => {
     // cy.getCookies() yields an array of cookies
     cy.getCookies()
       .should('have.length', 1)
-      .should(cookies => {
+      .then(cookies => {
         // each cookie has these properties
-        expect(cookies[0]).to.have.property('name', 'token');
-        expect(cookies[0]).to.have.property('value', '123ABC');
-        expect(cookies[0]).to.have.property('httpOnly', false);
-        expect(cookies[0]).to.have.property('secure', false);
-        expect(cookies[0]).to.have.property('domain');
-        expect(cookies[0]).to.have.property('path');
+        cy.wrap(cookies[0]).should('have.property', 'name', 'token');
+        cy.wrap(cookies[0]).should('have.property', 'value', '123ABC');
+        cy.wrap(cookies[0]).should('have.property', 'httpOnly', false);
+        cy.wrap(cookies[0]).should('have.property', 'secure', false);
+        cy.wrap(cookies[0]).should('have.property', 'domain');
+        cy.wrap(cookies[0]).should('have.property', 'path');
       });
   });
 
@@ -49,21 +49,21 @@ context('Cookies', () => {
     // cy.getAllCookies() yields an array of cookies
     cy.getAllCookies()
       .should('have.length', 2)
-      .should(cookies => {
+      .then(cookies => {
         // each cookie has these properties
-        expect(cookies[0]).to.have.property('name', 'key');
-        expect(cookies[0]).to.have.property('value', 'value');
-        expect(cookies[0]).to.have.property('httpOnly', false);
-        expect(cookies[0]).to.have.property('secure', false);
-        expect(cookies[0]).to.have.property('domain');
-        expect(cookies[0]).to.have.property('path');
+        cy.wrap(cookies[0]).should('have.property', 'name', 'key');
+        cy.wrap(cookies[0]).should('have.property', 'value', 'value');
+        cy.wrap(cookies[0]).should('have.property', 'httpOnly', false);
+        cy.wrap(cookies[0]).should('have.property', 'secure', false);
+        cy.wrap(cookies[0]).should('have.property', 'domain');
+        cy.wrap(cookies[0]).should('have.property', 'path');
 
-        expect(cookies[1]).to.have.property('name', 'key');
-        expect(cookies[1]).to.have.property('value', 'value');
-        expect(cookies[1]).to.have.property('httpOnly', false);
-        expect(cookies[1]).to.have.property('secure', false);
-        expect(cookies[1]).to.have.property('domain', '.example.com');
-        expect(cookies[1]).to.have.property('path');
+        cy.wrap(cookies[1]).should('have.property', 'name', 'key');
+        cy.wrap(cookies[1]).should('have.property', 'value', 'value');
+        cy.wrap(cookies[1]).should('have.property', 'httpOnly', false);
+        cy.wrap(cookies[1]).should('have.property', 'secure', false);
+        cy.wrap(cookies[1]).should('have.property', 'domain', '.example.com');
+        cy.wrap(cookies[1]).should('have.property', 'path');
       });
   });
 

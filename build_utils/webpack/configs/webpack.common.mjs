@@ -1,8 +1,3 @@
-/**
- * Webpack common configuration for both development and production environments.
- * @file The file is saved as `build_utils/webpack/webpack.common.js`.
- */
-/* eslint-disable no-underscore-dangle */
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import webpack from 'webpack';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
@@ -11,14 +6,13 @@ import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 import Dotenv from 'dotenv-webpack';
 import { fileURLToPath } from 'url';
-import path from 'path';
 
 import pkg from '../../../package.json' with { type: 'json' };
 import { entryPath, outputPath } from '../../config/commonPaths.mjs';
 import svgrConfig from '../../../svgr.config.mjs';
 import { ENVS } from '../../config/index.mjs';
 
-const __filename = fileURLToPath(import.meta.url);
+const filename = fileURLToPath(import.meta.url);
 
 const isBeta = process.env.APP_ENV === ENVS.BETA;
 const isRelease = process.env.APP_ENV === ENVS.PROD;
@@ -42,14 +36,14 @@ const config = {
     version: `${pkg.version}_${process.env.APP_ENV}`,
     store: 'pack',
     buildDependencies: {
-      config: [__filename],
+      config: [filename],
     },
   },
   devtool: isRelease || isBeta ? false : 'source-map',
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
         use: 'ts-loader',
       },
@@ -194,9 +188,6 @@ const config = {
     sideEffects: true,
   },
   plugins: [
-    new webpack.ProvidePlugin({
-      process: 'process/browser',
-    }),
     new webpack.DefinePlugin({
       'process.env.APP_ENV': JSON.stringify(process.env.APP_ENV),
     }),
@@ -222,15 +213,7 @@ const config = {
     }),
   ],
   resolve: {
-    alias: {
-      process: 'process/browser',
-    },
-    fallback: {
-      'process/browser': path.resolve('node_modules/process/browser.js'),
-    },
-    extensions: ['*', '.ts', '.tsx'],
-    symlinks: false,
-    cacheWithContext: false,
+    extensions: ['.ts', '.tsx', '.js'],
   },
 };
 

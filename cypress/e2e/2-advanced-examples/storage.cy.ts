@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 /// <reference types="cypress" />
 
 context('Local Storage / Session Storage', () => {
@@ -12,47 +11,47 @@ context('Local Storage / Session Storage', () => {
   it('cy.clearLocalStorage() - clear all data in localStorage for the current origin', () => {
     // https://on.cypress.io/clearlocalstorage
     cy.get('.ls-btn').click();
-    cy.get('.ls-btn').should(() => {
-      expect(localStorage.getItem('prop1')).to.eq('red');
-      expect(localStorage.getItem('prop2')).to.eq('blue');
-      expect(localStorage.getItem('prop3')).to.eq('magenta');
+    cy.get('.ls-btn').then(() => {
+      cy.wrap(localStorage.getItem('prop1')).should('eq', 'red');
+      cy.wrap(localStorage.getItem('prop2')).should('eq', 'blue');
+      cy.wrap(localStorage.getItem('prop3')).should('eq', 'magenta');
     });
 
     cy.clearLocalStorage();
-    cy.getAllLocalStorage().should(() => {
-      expect(localStorage.getItem('prop1')).to.be.null;
-      expect(localStorage.getItem('prop2')).to.be.null;
-      expect(localStorage.getItem('prop3')).to.be.null;
+    cy.getAllLocalStorage().then(() => {
+      cy.wrap(localStorage.getItem('prop1')).should('be.null');
+      cy.wrap(localStorage.getItem('prop2')).should('be.null');
+      cy.wrap(localStorage.getItem('prop3')).should('be.null');
     });
 
     cy.get('.ls-btn').click();
-    cy.get('.ls-btn').should(() => {
-      expect(localStorage.getItem('prop1')).to.eq('red');
-      expect(localStorage.getItem('prop2')).to.eq('blue');
-      expect(localStorage.getItem('prop3')).to.eq('magenta');
+    cy.get('.ls-btn').then(() => {
+      cy.wrap(localStorage.getItem('prop1')).should('eq', 'red');
+      cy.wrap(localStorage.getItem('prop2')).should('eq', 'blue');
+      cy.wrap(localStorage.getItem('prop3')).should('eq', 'magenta');
     });
 
     // Clear key matching string in localStorage
     cy.clearLocalStorage('prop1');
-    cy.getAllLocalStorage().should(() => {
-      expect(localStorage.getItem('prop1')).to.be.null;
-      expect(localStorage.getItem('prop2')).to.eq('blue');
-      expect(localStorage.getItem('prop3')).to.eq('magenta');
+    cy.getAllLocalStorage().then(() => {
+      cy.wrap(localStorage.getItem('prop1')).should('be.null');
+      cy.wrap(localStorage.getItem('prop2')).should('eq', 'blue');
+      cy.wrap(localStorage.getItem('prop3')).should('eq', 'magenta');
     });
 
     cy.get('.ls-btn').click();
-    cy.get('.ls-btn').should(() => {
-      expect(localStorage.getItem('prop1')).to.eq('red');
-      expect(localStorage.getItem('prop2')).to.eq('blue');
-      expect(localStorage.getItem('prop3')).to.eq('magenta');
+    cy.get('.ls-btn').then(() => {
+      cy.wrap(localStorage.getItem('prop1')).should('eq', 'red');
+      cy.wrap(localStorage.getItem('prop2')).should('eq', 'blue');
+      cy.wrap(localStorage.getItem('prop3')).should('eq', 'magenta');
     });
 
     // Clear keys matching regex in localStorage
     cy.clearLocalStorage(/prop1|2/);
-    cy.getAllLocalStorage().should(() => {
-      expect(localStorage.getItem('prop1')).to.be.null;
-      expect(localStorage.getItem('prop2')).to.be.null;
-      expect(localStorage.getItem('prop3')).to.eq('magenta');
+    cy.getAllLocalStorage().then(() => {
+      cy.wrap(localStorage.getItem('prop1')).should('be.null');
+      cy.wrap(localStorage.getItem('prop2')).should('be.null');
+      cy.wrap(localStorage.getItem('prop3')).should('eq', 'magenta');
     });
   });
 
@@ -61,9 +60,8 @@ context('Local Storage / Session Storage', () => {
     cy.get('.ls-btn').click();
 
     // getAllLocalStorage() yields a map of origins to localStorage values
-    cy.getAllLocalStorage().should(storageMap => {
-      expect(storageMap).to.deep.equal({
-        // other origins will also be present if localStorage is set on them
+    cy.getAllLocalStorage().then(storageMap => {
+      cy.wrap(storageMap).should('deep.equal', {
         'https://example.cypress.io': {
           prop1: 'red',
           prop2: 'blue',
@@ -79,10 +77,10 @@ context('Local Storage / Session Storage', () => {
 
     // clearAllLocalStorage() yields null
     cy.clearAllLocalStorage();
-    cy.getAllLocalStorage().should(() => {
-      expect(localStorage.getItem('prop1')).to.be.null;
-      expect(localStorage.getItem('prop2')).to.be.null;
-      expect(localStorage.getItem('prop3')).to.be.null;
+    cy.getAllLocalStorage().then(() => {
+      cy.wrap(localStorage.getItem('prop1')).should('be.null');
+      cy.wrap(localStorage.getItem('prop2')).should('be.null');
+      cy.wrap(localStorage.getItem('prop3')).should('be.null');
     });
   });
 
@@ -91,9 +89,8 @@ context('Local Storage / Session Storage', () => {
     cy.get('.ls-btn').click();
 
     // getAllSessionStorage() yields a map of origins to sessionStorage values
-    cy.getAllSessionStorage().should(storageMap => {
-      expect(storageMap).to.deep.equal({
-        // other origins will also be present if sessionStorage is set on them
+    cy.getAllSessionStorage().then(storageMap => {
+      cy.wrap(storageMap).should('deep.equal', {
         'https://example.cypress.io': {
           prop4: 'cyan',
           prop5: 'yellow',
@@ -109,10 +106,10 @@ context('Local Storage / Session Storage', () => {
 
     // clearAllSessionStorage() yields null
     cy.clearAllSessionStorage();
-    cy.getAllSessionStorage().should(() => {
-      expect(sessionStorage.getItem('prop4')).to.be.null;
-      expect(sessionStorage.getItem('prop5')).to.be.null;
-      expect(sessionStorage.getItem('prop6')).to.be.null;
+    cy.getAllSessionStorage().then(() => {
+      cy.wrap(sessionStorage.getItem('prop4')).should('be.null');
+      cy.wrap(sessionStorage.getItem('prop5')).should('be.null');
+      cy.wrap(sessionStorage.getItem('prop6')).should('be.null');
     });
   });
 });

@@ -1,6 +1,6 @@
 import { lazy } from 'react';
-import { createBrowserRouter } from 'react-router-dom';
-import { ComponentWithSuspense } from '@arpitmalik832/react-js-rollup-monorepo-library';
+import { createBrowserRouter } from 'react-router';
+import { ComponentWithSuspense } from '@arpitmalik832/react-ts-rollup-library';
 
 import PageWrapper from '../components/organisms/PageWrapper';
 import routes from './routes';
