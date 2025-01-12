@@ -2,7 +2,7 @@ import { lazy } from 'react';
 import {
   ComponentWithSuspense,
   HtmlContent,
-} from '@arpitmalik832/react-js-rollup-monorepo-library';
+} from '@arpitmalik832/react-ts-rollup-library';
 
 import { ROUTES, SEO } from '../enums/routes';
 

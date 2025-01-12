@@ -1,4 +1,4 @@
-import { ReduxProvider } from '@arpitmalik832/react-js-rollup-monorepo-library';
+import { ReduxProvider } from '@arpitmalik832/react-ts-rollup-library';
 
 import App from '../App';
 import store from '../redux/store/store';
