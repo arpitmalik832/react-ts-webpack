@@ -58,13 +58,11 @@ context('Connectors', () => {
     it('yields the returned value to the next command', () => {
       cy.wrap(1)
         .then(num => {
-          cy.log('loger', num);
           cy.wrap(num).should('eq', 1);
 
           return cy.wrap(2);
         })
         .then(num => {
-          cy.log('loger', num);
           cy.wrap(num).should('eq', 2);
         });
     });
