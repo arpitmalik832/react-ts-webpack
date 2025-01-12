@@ -1,9 +1,6 @@
 import { render, cleanup, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import {
-  ReduxProvider,
-  slices,
-} from '@arpitmalik832/react-js-rollup-monorepo-library';
+import { ReduxProvider, slices } from '@arpitmalik832/react-ts-rollup-library';
 import { configureStore } from '@reduxjs/toolkit';
 
 import Component from '../Button';

@@ -20,7 +20,7 @@ context('Misc', () => {
     // https://github.com/cypress-io/cypress/issues/5169
     // so skip some of the tests by passing flag "--env circle=true"
     const isCircleOnWindows =
-      Cypress.platform === 'win32' && Cypress.env('circle');
+      Cypress.platform === 'win32' && (Cypress.env('circle') as boolean);
 
     if (isCircleOnWindows) {
       cy.log('Skipping test on CircleCI');
@@ -31,7 +31,7 @@ context('Misc', () => {
     // cy.exec problem on Shippable CI
     // https://github.com/cypress-io/cypress/issues/6718
     const isShippable =
-      Cypress.platform === 'linux' && Cypress.env('shippable');
+      Cypress.platform === 'linux' && (Cypress.env('shippable') as boolean);
 
     if (isShippable) {
       cy.log('Skipping test on ShippableCI');
@@ -77,8 +77,12 @@ context('Misc', () => {
         scale: false,
         disableTimersAndAnimations: true,
         screenshotOnRunFailure: true,
-        onBeforeScreenshot() {},
-        onAfterScreenshot() {},
+        onBeforeScreenshot() {
+          return undefined;
+        },
+        onAfterScreenshot() {
+          return undefined;
+        },
       });
     });
   });
