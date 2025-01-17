@@ -4,13 +4,21 @@ Green="\033[0;32m"
 Blue="\033[0;34m"
 NC="\033[0m" # No Color
 
-# # e2e test code before commit.
-# echo "\n${Blue}=================================${NC}\n"
+# e2e test code before commit.
+echo "\n${Blue}=================================${NC}\n"
 
-# echo "${Green}Start - E2E testing.${NC}"
+echo "${Green}Start - E2E testing.${NC}"
 
-# pnpm e2e-run:pre-commit
+pnpm e2e-run:pre-commit
+E2E_EXIT_CODE=$?
 
-# echo "${Green}End - E2E testing.${NC}"
+# Check if build failed
+if [ $E2E_EXIT_CODE -ne 0 ]; then
+    echo "${Red}E2E tests failed with exit code $E2E_EXIT_CODE${NC}"
+    echo "\n${Blue}=================================${NC}\n"
+    exit 1
+fi
 
-# echo "\n${Blue}=================================${NC}\n"
+echo "${Green}End - E2E testing.${NC}"
+
+echo "\n${Blue}=================================${NC}\n"

@@ -1,13 +1,45 @@
 import { render, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import Component from '../Abc';
+import Abc from '../Abc';
 
-describe('Unit tests for Abc Page', () => {
-  afterEach(cleanup);
-  it('snapshot test', () => {
-    const component = render(<Component />);
+describe('Abc component tests', () => {
+  afterEach(() => {
+    cleanup();
+  });
 
-    expect(component).toMatchSnapshot();
+  it('renders without crashing', () => {
+    const { container } = render(<Abc />);
+    expect(container).toBeTruthy();
+  });
+
+  it('renders with correct text content', () => {
+    const { getByText } = render(<Abc />);
+    expect(getByText('Abc')).toBeInTheDocument();
+  });
+
+  it('renders a div element', () => {
+    const { container } = render(<Abc />);
+    const divElement = container.querySelector('div');
+    expect(divElement).toBeInTheDocument();
+  });
+
+  it('matches snapshot', () => {
+    const { container } = render(<Abc />);
+    expect(container).toMatchSnapshot();
+  });
+
+  it('has correct structure', () => {
+    const { container } = render(<Abc />);
+    const divElement = container.firstChild as HTMLElement;
+
+    // Check if it's a div
+    expect(divElement.tagName).toBe('DIV');
+
+    // Check text content
+    expect(divElement.textContent).toBe('Abc');
+
+    // Check that it has no child elements (only text)
+    expect(divElement.children.length).toBe(0);
   });
 });

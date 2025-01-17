@@ -16,19 +16,7 @@ const config = {
   // https://facebook.github.io/jest/docs/en/configuration.html#collectcoverage-boolean
   // collectCoverage: false, // [boolean]
   // https://facebook.github.io/jest/docs/en/configuration.html#collectcoveragefrom-array
-  collectCoverageFrom: [
-    'src/**/*.{ts,tsx}',
-    '!src/**/*.{test,spec}.{ts,tsx}',
-    '!src/**/*.stories.{ts,tsx}',
-    '!src/index.ts',
-    '!src/bootstrap.tsx',
-    '!src/configs/**',
-    '!src/enums/**',
-    '!src/redux/**',
-    '!src/routes/**',
-    '!src/stories/**',
-    '!**/*.d.ts',
-  ],
+  collectCoverageFrom: ['src/**/*.{ts,tsx}', '!src/**/*.stories.{ts,tsx}'],
   // https://facebook.github.io/jest/docs/en/configuration.html#coveragedirectory-string
   coverageDirectory: '<rootDir>/coverage', // [string]
   coveragePathIgnorePatterns: ['node_modules'],
@@ -73,7 +61,7 @@ const config = {
   // testEnvironment:'node',
   // testMatch: // [array<string>]
   // testPathIgnorePatterns: // [array<string>]
-  testRegex: '/__tests__/[a-zA-Z0-9_/]*.(test|spec).tsx?$',
+  testRegex: '/__tests__/[a-zA-Z0-9_.]*.(test|spec).tsx?$',
   // testResultsProcessor: // [string]
   // testRunner: // [string]
   // timers: // [string]

@@ -1,4 +1,4 @@
-name: Version Bump
+name: Publish Package
 
 on:
   workflow_dispatch:
@@ -22,13 +22,22 @@ on:
           - alpha
           - beta
           - rc
+      build_type:
+        description: 'Build type (prod, beta, stage)'
+        required: true
+        default: 'prod'
+        type: 'choice'
+        options:
+          - prod
+          - beta
+          - stage
 
 env:
   PNPM_VERSION: 10.0.0-beta.1
   NODE_VERSION: 22
 
 jobs:
-  version-bump:
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,3 +71,14 @@ jobs:
           pnpm version-bump:${{ github.event.inputs.version_bump_type }}:${{ github.event.inputs.release_type }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Building the project
+        run: |
+          if [ "${{ github.event.inputs.build_type }}" = "stage" ]; then
+            pnpm build
+          else
+            pnpm build:${{ github.event.inputs.build_type }}
+          fi
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
+      - name: Output package details
+        run: cat package.json

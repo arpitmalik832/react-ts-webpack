@@ -17,7 +17,7 @@ function Home() {
 
   useBackPress();
   const { data, isLoading, isError } = useFetchDataQuery<SampleQueryResponse>(
-    apis[0]?.axiosInstance,
+    apis[0].axiosInstance,
   );
 
   useEffect(() => {

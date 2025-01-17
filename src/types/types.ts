@@ -18,9 +18,9 @@ export interface VoidFunctionWithParams extends VoidFunction {
   (...args: AllParams[]): void;
 }
 
-export interface KeyValuePair {
+export interface KeyValuePair<T> {
   key: string;
-  value: string;
+  value: T | Record<string, T>;
 }
 
 export interface AppRedux {
